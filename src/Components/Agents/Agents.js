@@ -16,17 +16,19 @@ import {
   Filter,
   ReferenceInput
 } from "react-admin";
-import Button from '@material-ui/core/Button';
-import {Link } from "react-router-dom";
+import Button from "@material-ui/core/Button";
+import { Link } from "react-router-dom";
 const AgentListTitle = () => {
   return <span>Agent Overview</span>;
 };
 
-
 export const AgentList = props => (
-  <List title={<AgentListTitle />} sort={{order:'AESC'}} {...props}>
+  <List title={<AgentListTitle />} sort={{ order: "AESC" }} {...props}>
     <Datagrid rowClick="show">
       <TextField source="Identifier" />
+      <ReferenceField source="agenttypeId" reference="agenttypes">
+        <TextField source="Identifier" />
+      </ReferenceField>
       <TextField source="Description" />
       <TextField source="Status" />
       <EditButton />
@@ -49,7 +51,6 @@ const PropertiesFilter = props => (
 );
 
 export const AgentShow = props => (
-
   <Show {...props}>
     <SimpleShowLayout>
       <TextField source="id" />
@@ -57,7 +58,11 @@ export const AgentShow = props => (
       <TextField source="Description" />
       <TextField source="Status" />
       <ReferenceArrayField source="propertyIds" reference="property">
-        <List filters={<PropertiesFilter />} filterDefaultValues={{agentId: props.id}} {...props}>
+        <List
+          filters={<PropertiesFilter />}
+          filterDefaultValues={{ agentId: props.id }}
+          {...props}
+        >
           <Datagrid>
             <TextField source="id" />
             <ReferenceField source="propertytypeId" reference="propertytypes">
@@ -71,18 +76,20 @@ export const AgentShow = props => (
           </Datagrid>
         </List>
       </ReferenceArrayField>
-      <Link style={{textDecoration: "none"}} to={{
-        pathname: '/AgentCopy',
-         state: {agentId:  props.id }
-      }}>
+      <Link
+        style={{ textDecoration: "none" }}
+        to={{
+          pathname: "/AgentCopy",
+          state: { agentId: props.id }
+        }}
+      >
         <Button variant="contained" color="primary">
-         Agent Copy
-       </Button>
-       </Link>
+          Agent Copy
+        </Button>
+      </Link>
     </SimpleShowLayout>
   </Show>
 );
-
 
 const AgentTitle = ({ record }) => {
   return <span>User {record ? `"${record.Name}"` : ""}</span>;
@@ -94,6 +101,13 @@ export const AgentEdit = props => (
       <TextInput disabled source="id" />
       <TextInput source="Identifier" />
       <TextInput source="Description" />
+      <ReferenceInput
+        key="agenttypeId"
+        source="agenttypeId"
+        reference="agenttypes"
+      >
+        <SelectInput optionText="Identifier" />
+      </ReferenceInput>
       <SelectInput
         source="Status"
         choices={[
@@ -112,6 +126,9 @@ export const AgentCreate = props => (
       <TextInput disabled source="id" />
       <TextInput source="Identifier" />
       <TextInput source="Description" />
+      <ReferenceInput source="agenttypeId" reference="agenttypes">
+        <SelectInput optionText="Identifier" />
+      </ReferenceInput>
       <SelectInput
         source="Status"
         choices={[
