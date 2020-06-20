@@ -57,6 +57,9 @@ export const AgentShow = props => (
       <TextField source="Identifier" />
       <TextField source="Description" />
       <TextField source="Status" />
+        <ReferenceField source="agenttypeId" reference="agenttypes">
+          <TextField source="Identifier" />
+        </ReferenceField>
       <ReferenceArrayField source="propertyIds" reference="property">
         <List
           filters={<PropertiesFilter />}
